@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="css/all.css" rel="stylesheet">
+</head>
+<style>
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+.bg {
+  /* Full height */
+  height: 100%; 
+  background-color: black;
+  /* Center and scale the image nicely */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottomMenu{
+  position: absolute;
+  bottom: 0%;
+  right: 45%;
+  width: 10%;
+  height: 7%;
+}
+
+@keyframes hiding{
+  from {
+    background-color: #FFFFFF33;
+    color: #FFFFFF99;
+  }
+  to{
+    background-color: #FFFFFF00;
+    color: #FFFFFF00;
+  }
+}
+
+.hide{
+  background-color: #FFFFFF00;
+  color: #FFFFFF00;
+}
+
+.shown{
+  background-color: #FFFFFF33;
+  color: #FFFFFF99;
+}
+
+.buttonMenu{
+  height: 100%;
+  width: 30%;
+  border-color: transparent;
+  font-size: medium;
+  border-radius: 100%;
+}
+
+.settingMenu{
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  width: 3.5%;
+  height: 7%;
+}
+
+.previousMenu{
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 3.5%;
+  height: 7%;
+}
+
+.singleButton{
+  width:100%;
+}
+
+
+.overlay{
+  position:absolute;
+  height: 100%;
+  width:100%;
+}
+
+</style>
+<body>
+    <script src="js/threadPictures.js"></script>
+    <div id="main" class="bg">
+      <div class="previousMenu">
+        <button class="buttonMenu singleButton shown" onclick="localStorage.removeItem('id');location.href='listThread.html';"><i class="fas fa-arrow-left"></i></button>
+      </div>
+      <div class="settingMenu">
+        <button class="buttonMenu singleButton shown" onclick="location.href='settings.html';"><i class="fas fa-cog"></i></button>
+      </div>
+      <div class="bottomMenu">
+        <button class="buttonMenu shown" onclick="previous();"><i class="fas fa-step-backward"></i></button>
+        <button class="buttonMenu shown" onclick="clickOnPlay();"><i class="fas fa-pause"></i></button>
+        <button class="buttonMenu shown" onclick="next();"><i class="fas fa-step-forward"></i></button>
+      </div>
+      <img id='picture' class="picture" src="images/index.png" style="height:100%" onclick="makeButtonAppear();">
+        
+    </div>
+    
+    
+    <!-- Load the JS SDK asynchronously -->
+</body>
+</html>

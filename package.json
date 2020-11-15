@@ -1,0 +1,19 @@
+{
+  "name": "facepicture",
+  "version": "1.0.0",
+  "description": "cadre photo connecté à facebook",
+  "main": "main.js",
+  "dependencies": {
+    "electron": "^10.1.5",
+    "facebook-chat-api": "^1.8.0"
+  },
+  "devDependencies": {
+    "jquery": "^3.5.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "author": "elmoubi",
+  "license": "ISC"
+}
