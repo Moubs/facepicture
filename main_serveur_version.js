@@ -5,18 +5,29 @@ const { off } = require('process');
 const file_appstate = 'appstate.json'
 const express = require("express");
 const bodyParser = require('body-parser');
-
+var wifi = require('node-wifi');
+const checkInternetConnected = require('check-internet-connected');
 const app  = express();
 const port = 3000
 app.use(bodyParser.urlencoded({extended:true}));
 
-
+const config_internet = {
+  timeout: 5000, //timeout connecting to each server, each try
+  retries: 5,//number of retries to do before failing
+  domain: 'https://www.facebook.com',//the domain to check DNS record of
+}
 
 
 facebookAPI = ''
 //bot function
 
 currentUserID = ''
+
+
+wifi.init({
+  iface: null // network interface, choose a random wifi interface if set to null
+});
+
 
 //test if we are already logged
 function alreadyConnected(res,_callback){
@@ -44,12 +55,27 @@ function loginFacebook(req,res,_callback){
 
 
 
-
-
 //"routing"
 //connections
 
 app.use('/public',express.static(__dirname+'/app'));
+
+app.get('/isInternetAccessible',(req,res)=>{
+  checkInternetConnected().then((result) =>{
+    res.send("success"); // if success
+  }).catch((ex) =>{
+    res.send('erreur'); //if error
+  });
+});
+
+app.post('/connectToWifi',(req,res)=>{
+  wifi.connect(req.body, error => {
+    if (error) {
+      res.send('erreur')
+    }
+    res.send('success');
+  });
+});
 
 app.post('/loginFacebook',(req,res)=>{
   loginFacebook(req,res,successOrError);
@@ -58,6 +84,12 @@ app.post('/loginFacebook',(req,res)=>{
 app.get("/alreadyConnected",(req,res)=>{
   alreadyConnected(res,successOrError);
 });
+
+app.get("/disconnect",(req,res)=>{
+  facebookAPI.logout();
+  fs.unlinkSync(file_appstate);
+  res.send("success");
+})
 
 app.get('/listThread',(req,res)=>{
   if (facebookAPI == '') return res.send("error");
