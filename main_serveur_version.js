@@ -67,7 +67,8 @@ app.post('/connectToWifi',(req,res)=>{
   var options = {
     interface: 'wlan0',
     ssid:req.body.ssid,
-    passphrase:req.body.password
+    passphrase:req.body.password,
+    driver: 'wext'
   };
   wpa_supplicant.enable(options, function(err) {
     console.log(err)

@@ -1,3 +1,4 @@
 appstate.json
 package-lock.json
 node_modules/
+wlan0-wpa_supplicant.conf
