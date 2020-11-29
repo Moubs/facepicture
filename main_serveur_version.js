@@ -64,11 +64,10 @@ app.get('/isInternetAccessible',(req,res)=>{
 });
 
 app.post('/connectToWifi',(req,res)=>{
-  data = req.body
   var options = {
     interface: 'wlan0',
-    ssid:data.ssid,
-    passphrase:data.password
+    ssid:req.body.ssid,
+    passphrase:req.body.password
   };
   wpa_supplicant.enable(options, function(err) {
     if(err){
