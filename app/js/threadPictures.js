@@ -7,7 +7,9 @@ index = 0;
 
 isStop=false;
 
-var next_picture = ""
+var next_picture = "";
+
+appearprocess = false;
 
 function clickOnPlay(){
     isStop = !isStop;
@@ -63,8 +65,11 @@ function next(){
 }
 
 function makeButtonAppear(){
-    appearing();
-    setTimeout(disappearing,10000);
+    if (!appearprocess){
+        appearprocess=true;
+        appearing();
+        setTimeout(disappearing,10000);
+    }
 }
 
 function appearing(){
@@ -81,6 +86,7 @@ function disappearing(){
     }
     $('.buttonMenu').toggleClass("hide");
     $('.buttonMenu').toggleClass("shown");
+    appearprocess=false;
 }
 
 function changeBackground(){
