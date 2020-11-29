@@ -7,6 +7,8 @@ index = 0;
 
 isStop=false;
 
+var next_picture = ""
+
 function clickOnPlay(){
     isStop = !isStop;
     if (isStop == false){
@@ -16,6 +18,10 @@ function clickOnPlay(){
     }else{
         $(".fa-pause").toggleClass("fa-play");
         $(".fa-pause").toggleClass("fa-pause");
+        if(next_picture != ""){
+            clearTimeout(next_picture)
+            next_picture = ""
+        }
     }
 }
 
@@ -80,7 +86,7 @@ function disappearing(){
 function changeBackground(){
     if (!isStop){
         next();
-        setTimeout(changeBackground,600000);
+        next_picture= setTimeout(changeBackground,600000);
     }
 }
 
