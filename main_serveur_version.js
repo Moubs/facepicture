@@ -79,7 +79,7 @@ app.post('/connectToWifi',(req,res)=>{
   if(creds.password.indexOf(' ')!=-1){
     creds.password = "'"+creds.password+"'"
   }
-  //launch wpa_supplicant
+  //launch wpa_supplicant this is horrible but nothing more work
   exec("wpa_passphrase "+creds.ssid+" "+creds.password+" >> /etc/wpa_supplicant/wpa_supplicant.conf",(error,stdout,stderr)=>{
     if (error){
       console.log(error);
@@ -140,61 +140,7 @@ app.post('/getMessages',(req,res)=>{
   });
 });
 
-/*
-ipcMain.on("loginFacebook",function(event,data){
-  console.log(data);
-  loginFacebook(data,event,successOrError);
-});
 
-ipcMain.on("alreadyConnected",function(event,data){
-  alreadyConnected(event,successOrError);
-})
-
-//thread listing
-ipcMain.on("listThread", function(event,data){
-  if (facebookAPI == '') return event.sender.send("getThreads","error");
-  facebookAPI.getThreadList(20,null,[],(err,list)=>{
-    if(err) event.sender.send('getThreads',"error");
-    event.sender.send("getThreads",list);
-  });
-});
-
-ipcMain.on("getPicturesFromThread",function(event,threadID){
-  if (facebookAPI == '') return event.sender.send("getPictures","error");
-  //have to store picture 20 by twenty
-  offset = 0;
-  pictures = [];
-  concatPicture(event,threadID,offset,pictures);
-});
-
-ipcMain.on("getMessages",(event,threadID) =>{
-  if (facebookAPI == '') return event.sender.send("getMessages","error");
-  facebookAPI.getThreadHistory(threadID,4000,undefined,(err,history)=>{
-    if(err){
-      console.log(err);
-      event.sender.send('getMessages',"error");
-    }else{
-      extractPhotoFromMessages(event,history);
-    }
-  });
-});
-*/
-function concatPicture(event,threadID,offset,pictures){
-  if (offset == 100){
-    console.log(pictures);
-    event.sender.send("getPictures",pictures);
-  }else{
-    facebookAPI.getThreadPictures(threadID,offset,20,(err,list)=>{
-      if(err){
-        console.log(err);
-        event.sender.send('getPictures',"error");
-      }else{
-        pictures = pictures.concat(list);
-        concatPicture(event,threadID,offset+20,pictures);
-      }
-    });
-  }
-}
 
 function extractPhotoFromMessages(res,history){
   pictures = []
