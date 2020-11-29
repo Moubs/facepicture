@@ -1,11 +1,11 @@
 const login = require("facebook-chat-api");
-const { timers } = require('jquery');
+const { timers, data } = require('jquery');
 const fs = require("fs");
 const { off } = require('process');
 const file_appstate = 'appstate.json'
 const express = require("express");
 const bodyParser = require('body-parser');
-var wifi = require('node-wifi');
+var wpa = require('wpa_supplicant');
 const checkInternetConnected = require('check-internet-connected');
 const app  = express();
 const port = 3000
@@ -23,11 +23,18 @@ facebookAPI = ''
 
 currentUserID = ''
 
+networks = ''
 
-wifi.init({
-  iface: null // network interface, choose a random wifi interface if set to null
-});
+var wifi = wpa("wlan0");
 
+wifi.on('ready', function () {
+  wifi.scan() // scan once
+})
+
+
+wifi.on('update', function () {
+  networks=wifi.networks
+})
 
 //test if we are already logged
 function alreadyConnected(res,_callback){
@@ -71,21 +78,17 @@ app.get('/isInternetAccessible',(req,res)=>{
 
 app.post('/connectToWifi',(req,res)=>{
   data = req.body
-  if (data.ssid.indexOf(' ') != -1){
-    data.ssid = '"' + data.ssid + '"'
-  }
-  if (data.password.indexOf(' ') != 1){
-    data.password = '"' + data.password + '"'
-  }
   console.log(data);
-  wifi.connect(data, (error) => {
-    console.log(error);
-    if (error) {
-      res.send('erreur');
-    }else{
+  networks.forEach(function(n){
+    console.log(n.ssid);
+    console.log(data.ssid);
+    if (n.ssid==data.ssid){
+      n.connect({psk:data.password}):
       res.send('success');
+      break;
     }
   });
+  res.send('error');
 });
 
 app.post('/loginFacebook',(req,res)=>{
