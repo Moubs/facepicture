@@ -5,7 +5,7 @@ const { off } = require('process');
 const file_appstate = 'appstate.json'
 const express = require("express");
 const bodyParser = require('body-parser');
-var wpa = require('wpa_supplicant');
+var wpa_supplicant = require('wireless-tools/wpa_supplicant');
 const checkInternetConnected = require('check-internet-connected');
 const app  = express();
 const port = 3000
@@ -22,19 +22,6 @@ facebookAPI = ''
 //bot function
 
 currentUserID = ''
-
-networks = ''
-
-var wifi = wpa("wlan0");
-
-wifi.on('ready', function () {
-  wifi.scan() // scan once
-})
-
-
-wifi.on('update', function () {
-  networks=wifi.networks
-})
 
 //test if we are already logged
 function alreadyConnected(res,_callback){
@@ -78,17 +65,18 @@ app.get('/isInternetAccessible',(req,res)=>{
 
 app.post('/connectToWifi',(req,res)=>{
   data = req.body
-  console.log(data);
-  networks.forEach(function(n){
-    console.log(n.ssid);
-    console.log(data.ssid);
-    if (n.ssid==data.ssid){
-      n.connect({psk:data.password}):
-      res.send('success');
-      break;
+  var options = {
+    interface: 'wlan0',
+    ssid:data.ssid,
+    passphrase:data.password
+  };
+  wpa_supplicant.enable(options, function(err) {
+    if(err){
+      res.send('error')
+    }else{
+      res.send('success')
     }
   });
-  res.send('error');
 });
 
 app.post('/loginFacebook',(req,res)=>{
