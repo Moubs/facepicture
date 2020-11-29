@@ -89,7 +89,7 @@ function getNewPicture(){
     $.post('/getMessages',data={"id":id},function(list){
         pictures = []
         if (list==="error"){
-            return console.log("error");
+            window.location="/public/wifi.html";
         }else{
             console.log(list);
             pictures= list;
