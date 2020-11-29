@@ -70,11 +70,14 @@ app.get('/isInternetAccessible',(req,res)=>{
 });
 
 app.post('/connectToWifi',(req,res)=>{
-  wifi.connect(req.body, error => {
+  console.log(req.body);
+  wifi.connect(req.body, (error) => {
+    console.log(error);
     if (error) {
-      res.send('erreur')
+      res.send('erreur');
+    }else{
+      res.send('success');
     }
-    res.send('success');
   });
 });
 

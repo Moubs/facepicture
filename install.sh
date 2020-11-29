@@ -1,6 +1,6 @@
 #!/bin/bash
 #installing source
-sudo apt install -y nodejs npm unclutter
+sudo apt install -y nodejs npm unclutter network-manager
 #installing process
 npm install
 /bin/bash patch.sh
