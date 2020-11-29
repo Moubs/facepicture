@@ -96,7 +96,7 @@ app.post('/connectToWifi',(req,res)=>{
             }).catch((ex) =>{
               res.send('erreur'); //if error
             });
-          },3000);
+          },5000);
         }
       });
     }
