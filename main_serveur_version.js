@@ -70,15 +70,15 @@ app.get('/isInternetAccessible',(req,res)=>{
 });
 
 app.post('/connectToWifi',(req,res)=>{
-  console.log(req.body);
-  if (" " in req.body.ssid){
-    req.body.ssid = "'" + req.body.ssid + "'"
+  data = req.body
+  if (data.ssid.indexOf(' ')){
+    data.ssid = "'" + data.ssid + "'"
   }
-  if (" " in req.body.password){
-    req.body.password = "'" + req.body.password + "'"
+  if (data.password.indexOf(' ')){
+    data.password = "'" + data.password + "'"
   }
-  console.log(req.body);
-  wifi.connect(req.body, (error) => {
+  console.log(data);
+  wifi.connect(data, (error) => {
     console.log(error);
     if (error) {
       res.send('erreur');
