@@ -7,6 +7,7 @@ const express = require("express");
 const bodyParser = require('body-parser');
 var wpa_supplicant = require('wireless-tools/wpa_supplicant');
 const checkInternetConnected = require('check-internet-connected');
+const { exec } = require("child_process");
 const app  = express();
 const port = 3000
 app.use(bodyParser.urlencoded({extended:true}));
@@ -64,19 +65,42 @@ app.get('/isInternetAccessible',(req,res)=>{
 });
 
 app.post('/connectToWifi',(req,res)=>{
-  var options = {
-    interface: 'wlan0',
-    ssid:req.body.ssid,
-    passphrase:req.body.password,
-    driver: 'wext'
-  };
-  wpa_supplicant.enable(options, function(err) {
-    console.log(err)
-    if(err){
-      res.send('error')
+  creds = req.body
+  //sanitize entry
+  if(creds.ssid.indexOf("'")!=-1){
+    creds.ssid = creds.ssid.replace("'","\\'")
+  }
+  if(creds.ssid.indexOf(' ')!=-1){
+    creds.ssid = "'"+creds.ssid+"'"
+  }
+  if(creds.password.indexOf("'")!=-1){
+    creds.password = creds.password.replace("'","\\'")
+  }
+  if(creds.password.indexOf(' ')!=-1){
+    creds.password = "'"+creds.password+"'"
+  }
+  //launch wpa_supplicant
+  exec("wpa_passphrase "+creds.ssid+" "+creds.password+" >> /etc/wpa_supplicant/wpa_supplicant.conf",(error,stdout,stderr)=>{
+    if (error){
+      console.log(error);
+      res.send("error");
     }else{
-      res.send('success')
+      exec("systemctl restart wpa_supplicant",(error,stdout,stderr)=>{
+        if (error){
+          console.log(error);
+          res.send("error");
+        }else{
+          setTimeout(()=>{
+            checkInternetConnected().then((result) =>{
+              res.send("success"); // if success
+            }).catch((ex) =>{
+              res.send('erreur'); //if error
+            });
+          },3000);
+        }
+      });
     }
+    
   });
 });
 
