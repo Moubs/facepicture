@@ -53,7 +53,7 @@ function next(){
                 $('#picture')[0].style="width:100%"; 
             }
         } 
-    },20);
+    },1000);
 }
 
 function makeButtonAppear(){
