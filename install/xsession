@@ -10,4 +10,4 @@ unclutter -idle 1 &
 exec matchbox-window-manager -use_titlebar no &
 #matchbox-keyboard &
 #Execute Browser with options
-chromium-browser --noerrdialogs --disable-pinch --kiosk http://localhost:3000/public/login.html
+chromium-browser --noerrdialogs --disable-pinch --kiosk http://localhost:3000/public/wifi.html
