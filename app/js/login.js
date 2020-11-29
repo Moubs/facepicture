@@ -1,22 +1,23 @@
-const {ipcRenderer} = require('electron');
+//const {ipcRenderer} = require('electron');
 
 function alreadyConnected(){
-  response = ipcRenderer.sendSync('alreadyConnected',"test");
-  console.log(response);
-  if (response == "success"){
-    window.location.replace("listThread.html");
-  }
+  response = $.get('/alreadyConnected',function(response){
+    console.log(response);
+    if (response == "success"){
+      window.location.replace("/public/listThread.html");
+    }
+  });
 }
 
 function validate(event) {
   event.preventDefault();
   let email = $('#email')[0].value;
   let password = $('#password')[0].value;
-  response = ipcRenderer.sendSync('loginFacebook',{"email":email,"password":password});
-  if (response == "success"){
-    window.location.replace("listThread.html")
-  }
-  return false;
+  $.post('/loginFacebook',data={"email":email,"password":password},function(response){
+    if (response == "success"){
+      window.location.replace("/public/listThread.html")
+    }
+  })
 }
 
 alreadyConnected();

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link href="css/all.css" rel="stylesheet">
+    <link href="/public/css/all.css" rel="stylesheet">
 </head>
 <style>
 body, html {
@@ -89,20 +89,20 @@ body, html {
 
 </style>
 <body>
-    <script src="js/threadPictures.js"></script>
+    <script src="/public/js/threadPictures.js"></script>
     <div id="main" class="bg">
       <div class="previousMenu">
-        <button class="buttonMenu singleButton shown" onclick="localStorage.removeItem('id');location.href='listThread.html';"><i class="fas fa-arrow-left"></i></button>
+        <button class="buttonMenu singleButton shown" onclick="localStorage.removeItem('id');location.href='/public/listThread.html';"><i class="fas fa-arrow-left"></i></button>
       </div>
       <div class="settingMenu">
-        <button class="buttonMenu singleButton shown" onclick="location.href='settings.html';"><i class="fas fa-cog"></i></button>
+        <button class="buttonMenu singleButton shown" onclick="location.href='/public/settings.html';"><i class="fas fa-cog"></i></button>
       </div>
       <div class="bottomMenu">
         <button class="buttonMenu shown" onclick="previous();"><i class="fas fa-step-backward"></i></button>
         <button class="buttonMenu shown" onclick="clickOnPlay();"><i class="fas fa-pause"></i></button>
         <button class="buttonMenu shown" onclick="next();"><i class="fas fa-step-forward"></i></button>
       </div>
-      <img id='picture' class="picture" src="images/index.png" style="height:100%" onclick="makeButtonAppear();">
+      <img id='picture' class="picture" src="/public/images/index.png" style="height:100%" onclick="makeButtonAppear();">
         
     </div>
     

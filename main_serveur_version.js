@@ -1,9 +1,17 @@
-const { app, BrowserWindow, ipcMain, ipcRenderer } = require('electron');
 const login = require("facebook-chat-api");
 const { timers } = require('jquery');
 const fs = require("fs");
 const { off } = require('process');
 const file_appstate = 'appstate.json'
+const express = require("express");
+const bodyParser = require('body-parser');
+
+const app  = express();
+const port = 3000
+app.use(bodyParser.urlencoded({extended:true}));
+
+
+
 
 facebookAPI = ''
 //bot function
@@ -11,24 +19,25 @@ facebookAPI = ''
 currentUserID = ''
 
 //test if we are already logged
-function alreadyConnected(event,_callback){
-  if (!fs.existsSync(file_appstate)) return _callback(event,"erreur");
+function alreadyConnected(res,_callback){
+  if (!fs.existsSync(file_appstate)) return _callback(res,"erreur");
   login({appState: JSON.parse(fs.readFileSync(file_appstate, 'utf8'))}, (err, api) => {
-    if(err) return _callback(event,err);
+    if(err) return _callback(res,err);
     facebookAPI = api
     currentUserID = api.getCurrentUserID();
-    _callback(event,"success");
+    _callback(res,"success");
   });
 }
 
 //Facebook connexion with creds
-function loginFacebook(creds,event,_callback){
-  login(creds, (err, api) => {
-    if(err) return _callback(event,err);
+function loginFacebook(req,res,_callback){
+  console.log(req.body);
+  login(req.body, (err, api) => {
+    if(err) return _callback(res,err);
     facebookAPI = api
     currentUserID = api.getCurrentUserID();
     fs.writeFileSync(file_appstate, JSON.stringify(api.getAppState()));
-    _callback(event,"success");
+    _callback(res,"success");
   });
 }
 
@@ -39,6 +48,40 @@ function loginFacebook(creds,event,_callback){
 
 //"routing"
 //connections
+
+app.use('/public',express.static(__dirname+'/app'));
+
+app.post('/loginFacebook',(req,res)=>{
+  loginFacebook(req,res,successOrError);
+});
+
+app.get("/alreadyConnected",(req,res)=>{
+  alreadyConnected(res,successOrError);
+});
+
+app.get('/listThread',(req,res)=>{
+  if (facebookAPI == '') return res.send("error");
+  facebookAPI.getThreadList(20,null,[],(err,list)=>{
+    if(err) res.send("error");
+    res.send(list);
+  });
+});
+
+app.post('/getMessages',(req,res)=>{
+  console.log(req.body);
+  threadID=req.body.id
+  if (facebookAPI == '') return res.send("error");
+  facebookAPI.getThreadHistory(threadID,4000,undefined,(err,history)=>{
+    if(err){
+      console.log(err);
+      res.send("error");
+    }else{
+      extractPhotoFromMessages(res,history);
+    }
+  });
+});
+
+/*
 ipcMain.on("loginFacebook",function(event,data){
   console.log(data);
   loginFacebook(data,event,successOrError);
@@ -76,7 +119,7 @@ ipcMain.on("getMessages",(event,threadID) =>{
     }
   });
 });
-
+*/
 function concatPicture(event,threadID,offset,pictures){
   if (offset == 100){
     console.log(pictures);
@@ -94,7 +137,7 @@ function concatPicture(event,threadID,offset,pictures){
   }
 }
 
-function extractPhotoFromMessages(event,history){
+function extractPhotoFromMessages(res,history){
   pictures = []
   for (i in history){
     //message with attachments
@@ -119,36 +162,23 @@ function extractPhotoFromMessages(event,history){
   pictures.forEach(message => {
     message.attachments.forEach( picture =>{
       facebookAPI.resolvePhotoUrl(picture.ID,(err,url)=>{
-        if(err) event.sender.send('getMessages',"error");
+        if(err) res.send("error");
         photos.push(url);
         console.log('push');
       });
     });
   });
-  setTimeout(function(){event.sender.send('getMessages',photos)},10000);
+  setTimeout(function(){res.send(photos)},10000);
 }
 
 //callback for sync function
-function successOrError(event,message){
-  event.returnValue = message
-}
-
-function createWindow () {
-  // Cree la fenetre du navigateur.
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      nodeIntegration: true
-    }
-  })
-  //win.setFullScreen(true)
-  //win.removeMenu()
-  // et charger le fichier index.html de l'application.
-  win.loadFile('app/login.html')
+function successOrError(res,message){
+  res.send(message)
 }
 
 
 
-app.whenReady().then(createWindow)
+app.listen(port,()=>{
+  console.log(`Example app listening at http://localhost:${port}`);
+});
 
