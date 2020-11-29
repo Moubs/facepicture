@@ -1,9 +1,26 @@
-const {ipcRenderer} = require('electron');
+//const {ipcRenderer} = require('electron');
 
 if (localStorage.id != undefined){
-    location.href = "threadPictures.html?id="+localStorage.id;
+    location.href = "/public/threadPictures.html?id="+localStorage.id;
 }
 
+$.get('/listThread',function(list){
+    if (list=="error") return console.log("error");
+    console.log(list);
+    list.forEach(thread => {
+        if(thread.name !=null){
+            $("#threads")[0].innerHTML += "<li ><a href='/public/threadPictures.html?id="+thread.threadID+"'>"+thread.name+"</a></li>";
+        }else {
+            var name ='';
+            thread.participants.forEach(participant => {
+                name += participant.name +", "
+            });
+            $("#threads")[0].innerHTML += "<li><a href='/public/threadPictures.html?id="+thread.threadID+"'>"+name+"</a></li>";
+        }
+    });
+});
+
+/*
 ipcRenderer.on("getThreads",function(event,list){
     if (list=="error") return console.log("error");
     console.log(list);
@@ -19,5 +36,5 @@ ipcRenderer.on("getThreads",function(event,list){
         }
     });
 });
-ipcRenderer.send('listThread',"giveMe");
+ipcRenderer.send('listThread',"giveMe");*/
 

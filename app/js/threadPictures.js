@@ -1,6 +1,6 @@
 
-const {ipcRenderer} = require('electron');
-var id = window.location.href.substring(window.location.href.search(/[0-9]/g));
+//const {ipcRenderer} = require('electron');
+var id = window.location.href.substring(window.location.href.search(/=[0-9]/g)).substring(1);
 localStorage.setItem("id",id);
 pictures = [];
 index = 0;
@@ -80,10 +80,26 @@ function disappearing(){
 function changeBackground(){
     if (!isStop){
         next();
-        setTimeout(changeBackground,10000);
+        setTimeout(changeBackground,600000);
     }
 }
 
+function getNewPicture(){
+    clickOnPlay();
+    $.post('/getMessages',data={"id":id},function(list){
+        pictures = []
+        if (list==="error"){
+            return console.log("error");
+        }else{
+            console.log(list);
+            pictures= list;
+            clickOnPlay();
+            disappearing();
+            setTimeout(getNewPicture,3600000);
+        }
+    });
+}
+/*
 function getNewPicture(){
     clickOnPlay();
     ipcRenderer.send("getMessages",id);
@@ -101,5 +117,5 @@ ipcRenderer.on("getMessages",function(event,list){
         setTimeout(getNewPicture,3600000);
     }
     
-});
+});*/
 getNewPicture();
