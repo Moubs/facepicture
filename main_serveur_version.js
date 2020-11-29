@@ -71,11 +71,11 @@ app.get('/isInternetAccessible',(req,res)=>{
 
 app.post('/connectToWifi',(req,res)=>{
   data = req.body
-  if (data.ssid.indexOf(' ')){
-    data.ssid = "'" + data.ssid + "'"
+  if (data.ssid.indexOf(' ') != -1){
+    data.ssid = '"' + data.ssid + '"'
   }
-  if (data.password.indexOf(' ')){
-    data.password = "'" + data.password + "'"
+  if (data.password.indexOf(' ') != 1){
+    data.password = '"' + data.password + '"'
   }
   console.log(data);
   wifi.connect(data, (error) => {
