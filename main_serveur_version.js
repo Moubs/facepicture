@@ -59,6 +59,7 @@ function loginFacebook(req,res,_callback){
 //connections
 
 app.use('/public',express.static(__dirname+'/app'));
+app.use('/public/jquery',express.static(__dirname+'/node_modules/jquery'));
 
 app.get('/isInternetAccessible',(req,res)=>{
   checkInternetConnected().then((result) =>{
