@@ -70,6 +70,7 @@ app.post('/connectToWifi',(req,res)=>{
     passphrase:req.body.password
   };
   wpa_supplicant.enable(options, function(err) {
+    console.log(err)
     if(err){
       res.send('error')
     }else{
