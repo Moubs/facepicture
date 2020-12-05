@@ -24,6 +24,8 @@ facebookAPI = ''
 
 currentUserID = ''
 
+settings = undefined;
+
 //test if we are already logged
 function alreadyConnected(res,_callback){
   if (!fs.existsSync(file_appstate)) return _callback(res,"erreur");
@@ -112,6 +114,12 @@ app.get("/alreadyConnected",(req,res)=>{
   alreadyConnected(res,successOrError);
 });
 
+app.post("/setSettings",(req,res)=>{
+  settings=req.body
+  console.log(settings)
+  res.send('done');
+});
+
 app.get("/disconnect",(req,res)=>{
   facebookAPI.logout();
   fs.unlinkSync(file_appstate);
@@ -130,7 +138,7 @@ app.post('/getMessages',(req,res)=>{
   console.log(req.body);
   threadID=req.body.id
   if (facebookAPI == '') return res.send("error");
-  facebookAPI.getThreadHistory(threadID,4000,undefined,(err,history)=>{
+  facebookAPI.getThreadHistory(threadID,settings.number_of_message,undefined,(err,history)=>{
     if(err){
       console.log(err);
       res.send("error");
@@ -153,7 +161,7 @@ function extractPhotoFromMessages(res,history){
           //that i liked
           if(history[i].messageReactions.length > 0){
             for(j in history[i].messageReactions){
-              if((history[i].messageReactions[j].userID == currentUserID) && (history[i].messageReactions[j].reaction== "❤") ){
+              if( (settings.reactions == undefined) || ( (history[i].messageReactions[j].userID == currentUserID) && (settings.reactions.indexOf(Buffer.from(history[i].messageReactions[j].reaction).toString('hex')) != -1 )) ){
                 pictures.push(history[i]);
                 break;
               }

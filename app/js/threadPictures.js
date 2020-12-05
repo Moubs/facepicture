@@ -1,5 +1,15 @@
 
 //const {ipcRenderer} = require('electron');
+if (localStorage.settings == undefined){
+    settings={
+        "number_of_message":5000,
+        "reactions":["e29da4"]
+    }
+    localStorage.setItem("settings",JSON.stringify(settings))
+}
+
+$.post("/setSettings",JSON.parse(localStorage.settings));
+
 var id = window.location.href.substring(window.location.href.search(/=[0-9]/g)).substring(1);
 localStorage.setItem("id",id);
 pictures = [];
