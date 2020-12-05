@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="/public/jquery/dist/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <div id="main">
+        <form onsubmit="validate(event)" novalidate>
+            <p><label for="number_message">Nombre de messages à parcourir: </label> <span id="number_message_print"></span> </p>
+            <input type="range" min="1" max="5000" value="500" id="number_message">
+            <p>Afficher les images que j'ai:</p>
+            <input type="checkbox" id="coeur" name="coeur" value="e29da4">
+            <label for="coeur">❤</label><br>
+            <input type="checkbox" id="laugth" name="laugth" value="f09f9886">
+            <label for="laugth">😆</label><br> 
+            <input type="checkbox" id="surprise" name="surprise" value='f09f98ae'>
+            <label for="surprise">😮</label><br>
+            <input type="checkbox" id="sad" name="sad" value="f09f98a2">
+            <label for="sad">😢</label><br> 
+            <input type="checkbox" id="anger" name="anger" value="f09f98a0">
+            <label for="anger">😠</label><br> 
+            <input type="checkbox" id="thumbs" name="thumbs" value="f09f918d">
+            <label for="thumbs">👍</label><br> 
+            <button type="submit">valider</button>
+        </form>
+        <br>
+        <hr>
+        <form action="/disconnect" method="GET">
+            <button type="submit">se déconnecter</button>
+        </form>
+    </div>
+
+    <script>
+        var slider = document.getElementById("number_message");
+        var output = document.getElementById("number_message_print");
+        output.innerHTML = slider.value;
+        
+        slider.oninput = function() {
+          output.innerHTML = this.value;
+        }
+    </script>
+    <script src="/public/js/settings.js"></script>
+    <!-- Load the JS SDK asynchronously -->
+    </body>
+    </html>
