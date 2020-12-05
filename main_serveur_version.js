@@ -123,7 +123,7 @@ app.post("/setSettings",(req,res)=>{
 app.get("/disconnect",(req,res)=>{
   facebookAPI.logout();
   fs.unlinkSync(file_appstate);
-  res.send("success");
+  res.redirect("/public/login.html")
 })
 
 app.get('/listThread',(req,res)=>{
