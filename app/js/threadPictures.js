@@ -71,7 +71,7 @@ function next(){
                 $('#picture')[0].style="width:100%"; 
             }
         } 
-    },1000);
+    },1500);
 }
 
 function makeButtonAppear(){
