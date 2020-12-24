@@ -13,10 +13,24 @@
         <form onsubmit="validate(event)" novalidate>
             <input type="email" name="email" id="email"/>
             <input type="password" name="password" id="password"/>
+            <br>
+            <input type="checkbox" onclick="myFunction()">Show Password
+            <br>
             <button type="submit">Se connecter</button>
         </form>
     </div>
     
+
+<script>
+function myFunction() {
+  var x = document.getElementById("password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+</script>
     
     <!-- Load the JS SDK asynchronously -->
     </body>
