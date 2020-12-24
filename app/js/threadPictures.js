@@ -53,7 +53,7 @@ function previous(){
                 $('#picture')[0].style="width:100%"; 
             }
         } 
-    },20);
+    },2000);
 }
 
 function next(){
@@ -71,7 +71,7 @@ function next(){
                 $('#picture')[0].style="width:100%"; 
             }
         } 
-    },1500);
+    },2000);
 }
 
 function makeButtonAppear(){
