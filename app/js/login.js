@@ -15,7 +15,10 @@ function validate(event) {
   let password = $('#password')[0].value;
   $.post('/loginFacebook',data={"email":email,"password":password},function(response){
     if (response == "success"){
-      window.location.replace("/public/listThread.html")
+      window.location.replace("/public/listThread.html");
+    }else{
+      console.log(response);
+      alert(response.error);
     }
   })
 }
