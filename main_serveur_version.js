@@ -14,8 +14,8 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 const config_internet = {
   timeout: 5000, //timeout connecting to each server, each try
-  retries: 5,//number of retries to do before failing
-  domain: 'https://www.facebook.com',//the domain to check DNS record of
+  retries: 10,//number of retries to do before failing
+  domain: 'https://www.facebook.com'//the domain to check DNS record of
 }
 
 
@@ -59,7 +59,7 @@ app.use('/public',express.static(__dirname+'/app'));
 app.use('/public/jquery',express.static(__dirname+'/node_modules/jquery'));
 
 app.get('/isInternetAccessible',(req,res)=>{
-  checkInternetConnected().then((result) =>{
+  checkInternetConnected(config_internet).then((result) =>{
     res.send("success"); // if success
   }).catch((ex) =>{
     res.send('erreur'); //if error
